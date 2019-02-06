@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kanji Mnemonics just for you!</title>
+    <link rel="stylesheet" type="text/css" href="styles/stylesheet.css">
+    <script src="scripts/jquery-3.3.1.min.js"></script>
+    <script src="scripts/animations.js"></script>
+</head>
+<body>
+<div class="main">
+    <?php require("components/header.html") ?>
+
+    <a href="index.html?id=25"> I HOPE THIS WORKS </a>
+
+    Hello Pretty People! <?php echo $_GET['id']?> Hello Pretty People!
+    <div class="sidebar">
+        <a href="#">About</a>
+        <a href="#">Learn</a>
+        <a href="#">Eat</a>
+        <a href="#">Sleep</a>
+        <a href="#">Repeat</a>
+    </div>
+
+    <p> Hey click me! </p>
+
+    <?php
+        $servername = "localhost";
+        $username = "jeffrey";
+        $password = "password";
+
+        try {
+            $conn = new PDO("mysql:host=$servername;dbname=tutorials", $username, $password);
+            // set the PDO error mode to exception
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            //echo "Connected successfully";
+        }
+        catch(PDOException $e)
+        {
+            echo "Connection failed: " . $e->getMessage();
+        }
+
+        $sql = "SELECT * FROM kanji_table";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+
+        $kanjis = $stmt->fetchAll();
+
+        foreach ($kanjis as $kanji){
+            echo "<div class='kanjibox'>"
+                    ."<p class='kanji'>".$kanji["kanji_symbol"]."</p>"
+                    ."<p class='attr'>On'Yomi: ".$kanji["onyomi_reading"]."</p>"
+                    ."<p class='attr'>Meaning: ".$kanji["kanji_meaning"]."</p>"
+                    ."<p class='desc'>".$kanji["kanji_description"]."</p>"
+                ."</div>";
+        }
+    ?>
+</div>
+</body>
+</html>
